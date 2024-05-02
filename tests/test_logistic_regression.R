@@ -11,13 +11,10 @@ X_binary <- matrix(rnorm(100), ncol = 2)
 y_binary <- sample(c(0, 1), 50, replace = TRUE)
 
 # Test logistic_regression function for continuous y
-test_that("logistic_regression function works for continuous y", {
-  result_continuous <- logistic_regression(X_continuous, y_continuous)
-  expect_true("coefficients" %in% names(result_continuous))
-  expect_true("fitted_values" %in% names(result_continuous))
-  expect_true("summary" %in% names(result_continuous))
+test_that("logistic_regression function handles continuous y", {
+  expect_error(logistic_regression(X_continuous, y_continuous),
+               "Response variable y must be binary for logistic regression.")
 })
-
 # Test logistic_regression function for binary y
 test_that("logistic_regression function works for binary y", {
   result_binary <- logistic_regression(X_binary, y_binary)
@@ -25,3 +22,12 @@ test_that("logistic_regression function works for binary y", {
   expect_true("fitted_values" %in% names(result_binary))
   expect_true("summary" %in% names(result_binary))
 })
+
+# Additional tests for edge cases
+test_that("logistic_regression function handles invalid input", {
+  expect_error(logistic_regression(X_continuous, rep(0, 50)),
+               "Response variable y must be binary for logistic regression.")
+  expect_error(logistic_regression(X_binary, rep(0, 50)),
+               "Response variable y must be binary for logistic regression.")
+})
+
