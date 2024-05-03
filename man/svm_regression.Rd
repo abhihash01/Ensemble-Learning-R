@@ -16,6 +16,8 @@ This function performs Support Vector Machine regression.
 }
 \details{
 The SVM regression model is fitted using the svm function from the e1071 package.
+
+If y is binary, binary classification is done by default.
 }
 \examples{
 # Generate some example data

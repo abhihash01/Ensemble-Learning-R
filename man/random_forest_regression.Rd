@@ -16,6 +16,8 @@ This function performs Random Forest regression.
 }
 \details{
 The Random Forest regression model is fitted using the randomForest::randomForest function.
+
+If y is binary, binary classification is done by default.
 }
 \examples{
 # Generate some example data

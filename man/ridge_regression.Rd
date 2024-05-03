@@ -16,6 +16,8 @@ This function performs ridge regression.
 }
 \details{
 The ridge regression model is fitted using the glmnet::glmnet function from the glmnet package.
+
+If y is binary, binary classification is done by default.
 }
 \examples{
 # Generate some example data

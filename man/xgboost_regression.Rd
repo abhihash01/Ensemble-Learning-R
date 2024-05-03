@@ -16,6 +16,8 @@ This function performs XGBoost regression.
 }
 \details{
 The XGBoost regression model is fitted using the xgboost::xgboost function.
+
+If y is binary, binary classification is done by default.
 }
 \examples{
 # Generate some example data
