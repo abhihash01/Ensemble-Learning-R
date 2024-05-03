@@ -17,9 +17,9 @@ mock_random_forest_regression <- function(X, y, ntree = 500) {
 
 # Test ensemble_model function
 test_that("ensemble_model function combines predictions correctly", {
-  predictions <- ensemble_model(c("linear_regression", "random_forest_regression"),
+  predictions <- ensemble_model(c("elastic_net", "random_forest_regression"),
                                 c("regression", "regression"),
-                                list(list(), list(ntree = 500)),
+                                list(list(nfolds = 5), list(ntree = 500)),
                                 X,
                                 y)
   expect_is(predictions, "numeric")

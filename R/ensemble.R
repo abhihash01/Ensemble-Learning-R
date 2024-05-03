@@ -13,6 +13,7 @@
 #'                c("regression", "regression"),
 #'                list(list(), list(ntree = 500)),
 #'                X_train, y_train)
+
 ensemble_model <- function(models, types, params, X, y) {
   predictions <- list()
   for(i in seq_along(models)) {
@@ -22,26 +23,40 @@ ensemble_model <- function(models, types, params, X, y) {
 
     if(model_type == "regression") {
       if(model_name == "linear_regression") {
-        predictions[[length(predictions) + 1]] <- linear_regression(X, y)
+        fit <- linear_regression(X, y)
+        predictions[[length(predictions) + 1]] <- fit$fitted_values
       } else if(model_name == "lasso_regression") {
         lambda <- model_params[["lambda"]]
-        predictions[[length(predictions) + 1]] <- lasso_regression(X, y, lambda)
+        fit <- lasso_regression(X, y, lambda)
+        predictions[[length(predictions) + 1]] <- fit$fitted_values
       } else if(model_name == "ridge_regression") {
         lambda <- model_params[["lambda"]]
-        predictions[[length(predictions) + 1]] <- ridge_regression(X, y, lambda)
+        fit <- ridge_regression(X, y, lambda)
+        predictions[[length(predictions) + 1]] <- fit$fitted_values
       } else if(model_name == "random_forest_regression") {
         ntree <- model_params[["ntree"]]
-        predictions[[length(predictions) + 1]] <- random_forest_regression(X, y, ntree)
+        fit <- random_forest_regression(X, y, ntree)
+        predictions[[length(predictions) + 1]] <- fit$predictions
       }
-      # Add more regression models here
+      else if(model_name == "random_forest_regression") {
+        ntree <- model_params[["ntree"]]
+        fit <- random_forest_regression(X, y, ntree)
+        predictions[[length(predictions) + 1]] <- fit$predictions
+      }else if(model_name == "elastic_net") {
+        nfolds <- ifelse("nfolds" %in% names(model_params), model_params[["nfolds"]], 5)
+        fit <- elastic_net(X, y, nfolds=nfolds)
+        predictions[[length(predictions) + 1]] <- fit$fitted_values
+      }
     } else if(model_type == "classification") {
       if(model_name == "svm_regression") {
         kernel <- model_params[["kernel"]]
         predictions[[length(predictions) + 1]] <- svm_regression(X, y, kernel)
       }
-      # Add more classification models here
     }
   }
-  combined_prediction <- mean(unlist(predictions))
-  return(combined_prediction)
+
+  return(sapply(seq_along(predictions[[1]]), function(i) mean(sapply(predictions, "[[", i))))
 }
+
+
+
