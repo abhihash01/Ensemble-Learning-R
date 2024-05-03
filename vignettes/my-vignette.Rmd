@@ -282,7 +282,12 @@ The `bagging` function implements the bagging (bootstrap aggregating) ensemble m
  
 **Description**
 
-The `univariate_feature_selection_corr` function performs univariate feature selection based on Pearson Correlation Coefficient for regression problems or Point-Biserial Correlation Coefficient for binary classification problems. Here's an example:
+The `univariate_feature_selection` function performs univariate feature selection based on Pearson Correlation Coefficient for regression problems or Point-Biserial Correlation Coefficient for binary classification problems. 
+
+When the predictor has discrete variables, factorize the columns before passing it to the function.
+
+Here's an example:
+
 
 **Usage**
 
