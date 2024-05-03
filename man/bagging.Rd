@@ -2,13 +2,14 @@
 \alias{bagging}
 \title{Perform Bagging for Regression Models}
 \usage{
-  bagging(model, X, y, R, ...)
+  bagging(model, X, y, R, n, ...)
 }
 \arguments{
   \item{model}{A character string specifying the regression model to use. Supported values are "linear_regression", "logistic_regression", "ridge_regression", "lasso_regression", "random_forest_regression", "xgboost_regression", and "svm_regression".}
   \item{X}{The matrix of predictors.}
   \item{y}{The response variable.}
   \item{R}{Number of bagging iterations.}
+  \item{n}{Number of samples.}
   \item{...}{Additional arguments to pass to the regression model function.}
 }
 \description{
@@ -22,7 +23,7 @@
   set.seed(123)
   X <- matrix(rnorm(100 * 5), ncol = 5)
   beta <- rnorm(5)
-  y <- X %*% beta + rnorm(100)
+  y <- rnorm(100)
 
-  bagging_result <- bagging("linear_regression", X, y, 100)
+  bagging_result <- bagging("linear_regression", X, y, 100, 100)
 }
