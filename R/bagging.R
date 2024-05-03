@@ -4,11 +4,12 @@
 #' @param X The matrix of predictors
 #' @param y The response variable
 #' @param R Number of bagging iterations
+#' @param n Number of samples
 #' @param additional_args Additional arguments to pass to the regression model function
 #' @return A vector of averaged predicted values
 
-bagging <- function(model, X, y, R, ...) {
-  n <- nrow(X)
+bagging <- function(model, X, y, R, n, ...) {
+  #n <- nrow(X)
   predictions <- matrix(0, nrow = n, ncol = R)
 
   for (i in 1:R) {
