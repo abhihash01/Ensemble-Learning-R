@@ -26,35 +26,40 @@ ensemble_model <- function(models, types, params, X, y) {
         fit <- linear_regression(X, y)
         predictions[[length(predictions) + 1]] <- fit$fitted_values
       } else if(model_name == "lasso_regression") {
-        lambda <- model_params[["lambda"]]
+        lambda <- ifelse("lambda" %in% names(model_params), model_params[["lambda"]], 0.01)
         fit <- lasso_regression(X, y, lambda)
         predictions[[length(predictions) + 1]] <- fit$fitted_values
       } else if(model_name == "ridge_regression") {
-        lambda <- model_params[["lambda"]]
+        lambda <- ifelse("lambda" %in% names(model_params), model_params[["lambda"]], 0.01)
         fit <- ridge_regression(X, y, lambda)
         predictions[[length(predictions) + 1]] <- fit$fitted_values
       } else if(model_name == "random_forest_regression") {
-        ntree <- model_params[["ntree"]]
-        fit <- random_forest_regression(X, y, ntree)
-        predictions[[length(predictions) + 1]] <- fit$predictions
-      }
-      else if(model_name == "random_forest_regression") {
-        ntree <- model_params[["ntree"]]
+        ntree <- ifelse("ntree" %in% names(model_params), model_params[["ntree"]], 500)
         fit <- random_forest_regression(X, y, ntree)
         predictions[[length(predictions) + 1]] <- fit$predictions
       }else if(model_name == "elastic_net") {
         nfolds <- ifelse("nfolds" %in% names(model_params), model_params[["nfolds"]], 5)
         fit <- elastic_net(X, y, nfolds=nfolds)
         predictions[[length(predictions) + 1]] <- fit$fitted_values
-      }
-    } else if(model_type == "classification") {
-      if(model_name == "svm_regression") {
-        kernel <- model_params[["kernel"]]
-        predictions[[length(predictions) + 1]] <- svm_regression(X, y, kernel)
+      }else if(model_name == "svm_regression") {
+        kernel <- ifelse("kernel" %in% names(model_params), model_params[["kernel"]], 'linear')
+        fit <- svm_regression(X, y, kernel)
+        predictions[[length(predictions) + 1]] <- fit$predictions
+      }else if(model_name == "xgboost_regression") {
+        nrounds <- ifelse("nrounds" %in% names(model_params), model_params[["nrounds"]], 100)
+        fit <- xgboost_regression(X, y, nrounds)
+        predictions[[length(predictions) + 1]] <- fit$predictions
       }
     }
-  }
+    #else if(model_type == "classification") {
+    #  if(model_name == "svm_regression") {
+    #    kernel <- ifelse("kernel" %in% names(model_params), model_params[["kernel"]], 'linear')
+    #    fit <- svm_regression(X, y, kernel)
+    #    predictions[[length(predictions) + 1]] <- fit$predictions
+    #  }
+    #}
 
+  }
   return(sapply(seq_along(predictions[[1]]), function(i) mean(sapply(predictions, "[[", i))))
 }
 
