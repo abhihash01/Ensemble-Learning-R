@@ -18,6 +18,8 @@
   The Elastic Net regularization is done using glmnet::glmnet function from the glmnet package with alpha varying from 0 to 1.
 
   Best value for alpha and lambda is identified through cross validation using cv.glmnet function, by increasing alpha stepwise from 0 to 1.
+
+ If y is binary, binary classification is done by default.
 }
 \examples{
     # Generate some example data

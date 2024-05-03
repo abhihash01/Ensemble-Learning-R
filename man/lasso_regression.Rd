@@ -16,6 +16,8 @@ This function performs Lasso regression.
 }
 \details{
 The Lasso regression model is fitted using the glmnet::glmnet function from the glmnet package with alpha=1.
+
+If y is binary, binary classification is done by default.
 }
 \examples{
 # Generate some example data
