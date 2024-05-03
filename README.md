@@ -16,28 +16,14 @@ The main features of the package are:
 *   **Logistic Regression**: Perform logistic regression for binary classification problems.
 *   **Lasso Regression**: Implement Lasso regression, a regularization technique for linear regression models.
 *   **Ridge Regression**: Implement Ridge regression, a regularization technique for linear regression models.
-*   **Random Forest Regression**: Perform Random Forest regression, a powerful ensemble learning method for regression tasks.
+*   **Random Forest Regression**: Perform Random Forest regression, a powerful ensemble learning method for regression tasks. If y is binary, it will perform classification by default.
+*   **Support Vector Machine Regression**: Perform Support Vector Machine regression, a powerful method for regression tasks. If y is binary, it will perform classification by default.
+*   **XGBoost Regression**: Perform XGBoost regression, a powerful boosting method for regression tasks. If y is binary, it will perform classification by default.
 *   **Feature Selection**: Perform univariate feature selection based on Pearson Correlation Coefficient for regression or Point-Biserial Correlation Coefficient for binary classification.
 *   **Bagging**: Perform bagging using bootrstrap aggregation.
 *   **Ensemble Modeling**: Combine the predictions of multiple models using various ensemble techniques.
 
 This vignette provides an overview of the package’s functionalities and demonstrates the usage of each function with examples and sample data.n
-
-* * *
-
-Installation
-============
-
-You can install the simpleEnsembleGroup16 package from GitHub using the following command:
-
-*   **Install the devtools package if not already installed**
-    
-    install.packages(“devtools”)
-    
-*   **Install the simpleEnsembleGroup16 package from GitHub**
-    
-    devtools::install\_github(“abhihash01/Ensemble-Learning-R”)
-    
 
 * * *
 
@@ -106,6 +92,13 @@ The `ridge_regression` function performs Ridge regression. Here’s an example:
     #> Loading required package: Matrix
     #> Loaded glmnet 4.1-8
 
+If y is binary, binary classification is done by default.
+
+    X_binary <- matrix(rnorm(100), ncol = 2)
+    y_binary <- sample(c(0, 1), 50, replace = TRUE)
+    lambda <- 0.1
+    result_binary <- ridge_regression(X_binary, y_binary, lambda)
+
 **Arguments**
 
 *   **X:** Matrix of predictors/independent variables.
@@ -128,6 +121,13 @@ The `lasso_regression` function performs Lasso regression. Here’s an example:
     
     # Perform Lasso regression
     result <- lasso_regression(X, y, lambda)
+
+If y is binary, binary classification is done by default.
+
+    X_binary <- matrix(rnorm(100), ncol = 2)
+    y_binary <- sample(c(0, 1), 50, replace = TRUE)
+    lambda <- 0.1
+    result_binary <- lasso_regression(X_binary, y_binary, lambda)
 
 **Arguments**
 
@@ -154,6 +154,14 @@ The `random_forest_regression` function performs Random Forest regression. Here�
     #> randomForest 4.7-1.1
     #> Type rfNews() to see new features/changes/bug fixes.
 
+If y is binary, binary classification is done by default.
+
+    X_binary <- matrix(rnorm(100), ncol = 2)
+    y_binary <- sample(c(0, 1), 50, replace = TRUE)
+    result_binary <- random_forest_regression(X_binary, y_binary)
+    #> Warning in randomForest.default(x = X, y = y, ntree = ntree): The response has
+    #> five or fewer unique values.  Are you sure you want to do regression?
+
 **Arguments**
 
 *   **X:** Matrix of predictors/independent variables.
@@ -176,6 +184,12 @@ The `svm_regression` function performs Support Vector Machine regression. Here�
     # Perform SVM regression
     result <- svm_regression(X, y)
 
+If y is binary, binary classification is done by default.
+
+    X_binary <- matrix(rnorm(100), ncol = 2)
+    y_binary <- sample(c(0, 1), 50, replace = TRUE)
+    result_binary <- svm_regression(X_binary, y_binary)
+
 **Arguments**
 
 *   **X:** Matrix of predictors/independent variables.
@@ -196,7 +210,13 @@ The `xgboost_regression` function performs XGBoost regression. Here’s an examp
     y <- rnorm(50)
     
     # Perform XGBoost regression
-    result <- xgboost_regression(X, y)
+    result <- xgboost_regression(X, y, nrounds= 10)
+    
+If y is binary, binary classification is done by default.
+
+    X_binary <- matrix(rnorm(100), ncol = 2)
+    y_binary <- sample(c(0, 1), 50, replace = TRUE)
+    result_binary <- xgboost_regression(X_binary, y_binary, nrounds= 10)
 
 **Arguments**
 
@@ -217,8 +237,8 @@ The `bagging` function implements the bagging (bootstrap aggregating) ensemble m
       X <- matrix(rnorm(100 * 5), ncol = 5)
       beta <- rnorm(5)
       y <- X %*% beta + rnorm(100)
-    
-      # bagging_result <- bagging("linear_regression", X, y, 100)
+      n <- nrow(X)
+      bagging_result <- bagging("linear_regression", X, y, 100, n)
 
 **Arguments**
 
@@ -233,7 +253,11 @@ The `bagging` function implements the bagging (bootstrap aggregating) ensemble m
 
 **Description**
 
-The `univariate_feature_selection_corr` function performs univariate feature selection based on Pearson Correlation Coefficient for regression problems or Point-Biserial Correlation Coefficient for binary classification problems. Here’s an example:
+The `univariate_feature_selection` function performs univariate feature selection based on Pearson Correlation Coefficient for regression problems or Point-Biserial Correlation Coefficient for binary classification problems.
+
+When the predictor has discrete variables, factorize the columns before passing it to the function.
+
+Here’s an example:
 
 **Usage**
 
@@ -271,10 +295,23 @@ The `ensemble_model` function combines the predictions of multiple models. Here�
 
 **Usage**
 
-    # ensemble_model(c("linear_regression", "random_forest_regression"),
-    #                c("regression", "regression"),
-    #                list(list(), list(ntree = 500)),
-    #                X_train, y_train)
+    X_train <- matrix(rnorm(100), ncol = 2)
+    y_train <- rnorm(50)
+    
+    ensemble_model(c("linear_regression", "random_forest_regression"),
+                    c("regression", "regression"),
+                    list(list(), list(ntree = 500)),
+                    X_train, y_train)
+    #>  [1]  0.297076748 -0.246422380  0.217887168  0.147506717 -0.041135744
+    #>  [6] -0.391632348  0.395544961  0.160136817  0.402803179 -0.148355544
+    #> [11]  0.148909318  0.477702533 -0.083182316  0.585345620 -0.465757026
+    #> [16] -0.452943702  0.005753522  0.467168614 -0.266162778 -0.122601270
+    #> [21]  0.391019111 -0.032386179  0.301721607  0.249529777 -0.044698699
+    #> [26] -0.640687147 -0.005848567 -0.504072467  0.076760006 -0.123218023
+    #> [31]  0.201280794 -0.286444725 -0.005998550 -0.317584222 -0.278576346
+    #> [36]  0.271710157 -0.271195267  0.180686488  0.035753022  0.234377146
+    #> [41] -0.512777416 -0.427712604  0.301743546  0.081436504 -0.212884233
+    #> [46] -0.084313894 -0.168283711 -0.403803708  0.482207801 -0.061946326
 
 **Arguments**
 
