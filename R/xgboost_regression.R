@@ -8,7 +8,8 @@
 #' @return List containing predictions and model object.
 #' @export
 xgboost_regression <- function(X, y, nrounds = 100) {
-  library(xgboost)  # Import the xgboost package
+  # Load the xgboost package
+  library(xgboost)
 
   fit <- xgboost(data = as.matrix(X), label = y, nrounds = nrounds)
   predictions <- predict(fit, newdata = as.matrix(X))

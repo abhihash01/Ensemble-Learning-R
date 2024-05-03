@@ -8,7 +8,8 @@
 #' @return List containing predictions and model object.
 #' @export
 random_forest_regression <- function(X, y, ntree = 500) {
-  library(randomForest)  # Import the randomForest package
+  #load the randomForest package
+  library(randomForest)
 
   fit <- randomForest(x = X, y = y, ntree = ntree)
   predictions <- predict(fit, X)
