@@ -1,4 +1,4 @@
-simpleEnsembleGroup16
+Ensemble Learning in R
 =====================
 
     library(simpleEnsembleGroup16)
